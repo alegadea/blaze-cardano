@@ -563,6 +563,19 @@ interface MaestroAdditionalUTxO {
   txout_cbor: string;
 }
 
-function purposeFromTag(_tag: string): RedeemerTag {
-  throw new Error("unimplemented");
+function purposeFromTag(tag: string): RedeemerTag {
+  const tagMap: { [key: string]: RedeemerTag } = {
+    spend: RedeemerTag.Spend,
+    mint: RedeemerTag.Mint,
+    cert: RedeemerTag.Cert,
+    wdrl: RedeemerTag.Reward,
+  };
+
+  const normalizedTag = tag.toLowerCase();
+
+  if (normalizedTag in tagMap) {
+    return tagMap[normalizedTag]!;
+  } else {
+    throw new Error(`Invalid tag: ${tag}.`);
+  }
 }
